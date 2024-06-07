@@ -1,54 +1,51 @@
 <% layout('layouts/boilerplate') %>
-<div class="row">
-    <h1 class="text-center">New Campground</h1>
-    <div class="col-6 offset-3">
-        <form action="/campgrounds" method="POST" novalidate class="needs-validation" enctype="multipart/form-data">
-            <div class="my-3">
-                <label class="form-label" for="title">Campground Title</label>
-                <input class="form-control" id="title" type="text" name="title" required>
-                <div class="valid-feedback">
-                    Looks good!
+    <div class="row">
+        <h1 class="text-center">New Campground</h1>
+        <div class="col-md-6 offset-md-3">
+            <form action="/campgrounds" method="POST" novalidate class="needs-validation" enctype="multipart/form-data">
+                <div class="my-3">
+                    <label class="form-label" for="title">Campground Title</label>
+                    <input class="form-control" id="title" type="text" name="title" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="location">Location</label>
-                <input class="form-control" id="location" type="text" name="location" required>
-                <div class="valid-feedback">
-                    Looks good!
+                <div class="mb-3">
+                    <label class="form-label" for="location">Location</label>
+                    <input class="form-control" id="location" type="text" name="location" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="images">Upload Image</label>
-                <input type="file" class="form-control" name="images" id="images" multiple>
-            </div>
-            <!-- <div class="mb-3">
-                <label class="form-label" for="image">Image URL</label>
-                <input class="form-control" id="image" type="text" name="image" required>
-                <div class="valid-feedback">
-                    Looks good!
-                </div> -->
-            <!-- </div> -->
-            <div class="mb-3">
-                <label class="form-label" for="price">Campground Price</label>
-                <div class="input-group">
-                    <span class="input-group-text" id="price-label">$</span>
-                    <input id="price" name="price" type="text" class="form-control" placeholder="0.00" aria-label="price" aria-describedby="price-label" required>
+                <div class="mb-3">
+                    <label class="form-label" for="price">Campground Price</label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="price-label">$</span>
+                        <input id="price" name="price" type="text" class="form-control" placeholder="0.00"
+                            aria-label="price" aria-describedby="price-label" required>
+                    </div>
                 </div>
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="description">Description</label>
-                <textarea class="form-control" id="description" type="text" name="description" required></textarea>
-                <div class="valid-feedback">
-                    Looks good!
+                <div class="mb-3">
+                    <label class="form-label" for="description">Description</label>
+                    <textarea class="form-control" id="description" type="text" name="description" required></textarea>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
-            </div>
-            <div class="mb-3">
-                <button class="btn btn-success">Add Campground</button>
-            </div>
-        </form>
-        <footer>
-            <a href="/campgrounds">Back</a>
-        </footer>
+                <div class="previewImgContainer mb-4">
+                    <input type="file" id="file-input" name="images" onchange="preview()" multiple>
+                    <label for="file-input" class="previewLabel">
+                        <i class="fas fa-upload"></i> &nbsp; Upload Images
+                    </label>
+                    <p id="num-of-files">No Files Chosen</p>
+                    <div id="previewImages"></div>
+                </div>     
+                <div class="mb-3">
+                    <button class="btn btn-success">Add Campground</button>
+                </div>
+            </form>
+            <footer>
+                <a href="/campgrounds">Back</a>
+            </footer>
+        </div>
     </div>
-</div>
-

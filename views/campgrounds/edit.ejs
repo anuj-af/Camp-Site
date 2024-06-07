@@ -1,7 +1,7 @@
 <% layout('layouts/boilerplate') %>
     <div class="row">
         <h1 class="text-center">Edit Campground</h1>
-        <div class="col-6 offset-3">
+        <div class="col-md-6 offset-md-3">
             <form method="POST" action="/campgrounds/<%= campground._id %>?_method=PUT" novalidate
                 class="needs-validation" enctype="multipart/form-data">
                 <div class="my-3">
@@ -21,10 +21,6 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label" for="images">Add Images</label>
-                    <input class="form-control" type="file" id="images" name="images" multiple>
-                </div>
-                <div class="mb-3">
                     <label class="form-label" for="price">Campground Price</label>
                     <div class="input-group">
                         <span class="input-group-text" id="price-label">$</span>
@@ -42,6 +38,21 @@
                     <div class="valid-feedback">
                         Looks good!
                     </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="images">Upload Image</label>
+                    <input type="file" class="form-control" name="images" id="images" multiple>
+                </div>
+                <div class="mb-3 p-2 row" >
+                    <% campground.images.forEach(function(img,i) { %>
+                        <figure class="col-6">
+                            <img src="<%= img.thumbnail %>" alt="" crossorigin="anonymous">
+                            <figcaption>
+                                <label for="image<%=i%>">Delete?</label>
+                                <input id="image<%=i%>" type="checkbox" name="deleteImages[]" value="<%= img.filename %>">
+                            </figcaption>
+                        </figure>
+                    <% }) %>
                 </div>
                 <div class="mb-3">
                     <button class="btn btn-primary">Save Changes</button>

@@ -1,4 +1,7 @@
 const Campground = require('../models/campground');
+const opencage = require('opencage-api-client');
+const ExpressError = require('../utils/ExpressError');
+const {cloudinary} = require('../cloudinary');
 
 module.exports.index = async (req, res) => {
     const campgrounds = await Campground.find({}).populate('images');
@@ -24,10 +27,17 @@ module.exports.createCampground = async (req, res) => {
     //     const msg = error.details.map(elm => elm.message).join(',');
     //     throw new ExpressError(msg,400)
     // }
-
+    const geoData = await opencage.geocode({
+        q: req.body.location,
+        limit: 1
+    })
     const campground = new Campground(req.body);
+    console.log(req.files);
     campground.images = req.files.map(f => ({ url: f.path, filename: f.filename })); //Implicit return
     campground.author = req.user._id;
+    campground.geometry.type = 'Point';
+    campground.geometry.coordinates.push(geoData.results[0].geometry.lat);
+    campground.geometry.coordinates.push(geoData.results[0].geometry.lng);
     await campground.save();
     console.log(campground);
     req.flash('success', 'Successfully made a new Campground');
@@ -41,7 +51,6 @@ module.exports.renderNewForm = (req, res) => {
 module.exports.showCampground = async (req, res, next) => {
     const { id } = req.params;
     const campground = await Campground.findById(id).populate({ path: 'reviews', populate: { path: 'author' } }).populate('author').populate('images');//Nested populate
-    console.log(campground);
     // if(!campground) throw new ExpressError('Campground Not Found',404);
     if (!campground) {
         req.flash('error', 'Cannot find that Found');
@@ -56,6 +65,12 @@ module.exports.updateCampground = async (req, res, next) => {
     const imgs = req.files.map(f => ({ url: f.path, filename: f.filename })); //Implicit return
     campground.images.push(...imgs); //Spreading array as we want to push elements into an array not array into an array
     await campground.save();
+    if(req.body.deleteImages){
+        for(let filename of req.body.deleteImages){
+            await cloudinary.uploader.destroy(filename);
+        }
+        await campground.updateOne({$pull: {images: {filename: {$in: req.body.deleteImages}}}});
+    }
     req.flash('success', 'Successfully updated the Campground');
     res.redirect(`/campgrounds/${campground._id}`);
 }

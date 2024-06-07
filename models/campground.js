@@ -2,15 +2,37 @@ const mongoose = require('mongoose');
 const Review = require('./review');
 const Schema = mongoose.Schema;
 
+
+// https://res.cloudinary.com/camp-site/image/upload/w_300/v1717389481/Camp-Site/zi7rasmhrdtzoinfx3b4.jpg
+const ImageSchema = new Schema({
+    url: String,
+    filename: String
+});
+ImageSchema.virtual('thumbnail').get(function () {
+    return this.url.replace('/upload', '/upload/w_250');
+});
+
 const campgroundSchema = new Schema({
     title: String,
     image: String,
     images: [
-        {
-            url: String,
-            filename: String
-        }
+        // {
+        //     url: String,
+        //     filename: String
+        // }
+        ImageSchema
     ],
+    geometry: {
+        type: {
+          type: String,
+          enum: ['Point'],
+          required: true
+        },
+        coordinates: {
+          type: [Number],
+          required: true
+        }
+    },
     price: Number,
     description: String,
     location: String,
