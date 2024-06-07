@@ -22,9 +22,9 @@ const reviewRoutes = require('./routes/reviews');
 const userRoutes = require('./routes/users');
 
 
-const dbUrl = 'mongodb://127.0.0.1:27017/yelp-camp';
-mongoose.connect(dbUrl);
-// mongoose.connect(process.env.DB_URL);
+// const dbUrl = 'mongodb://127.0.0.1:27017/yelp-camp';
+// mongoose.connect(dbUrl);
+mongoose.connect(process.env.DB_URL);
 
 // Handling connection events
 const db = mongoose.connection;
@@ -47,7 +47,8 @@ app.use(mongoSanitize());
 app.use( helmet({ contentSecurityPolicy: false }) );
 
 const store = MongoDBStore.create({
-    mongoUrl: dbUrl,
+    // mongoUrl: dbUrl,
+    mongoUrl: process.env.DB_URL,
     touchAfter: 24 * 60 * 60, //If the session data is not modified don't update it till 24 hours
     crypto: {
         secret: process.env.SECRET
