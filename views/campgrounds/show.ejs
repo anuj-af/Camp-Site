@@ -37,7 +37,7 @@
         <ul class="list-group list-group-flush">
           <li class="list-group-item text-muted"><%= campground.location %></li>
           <li class="list-group-item">Owned By: <%= campground.author.username %></li>
-          <li class="list-group-item">$<%=campground.price%>per night</li>
+          <li class="list-group-item">&#8377;<%=campground.price%>per night</li>
         </ul>
         <% if(currUser && campground.author.equals(currUser._id)){ %>
           <div class="card-body">
@@ -105,5 +105,6 @@
 <!-- Script File for Map -->
 <script>
   const campground = <%-JSON.stringify(campground)%>;
+  const MAPBOX_TOKEN = '<%- process.env.MAPBOX_TOKEN %>';
 </script>
 <script src="/javascripts/renderMap.js"></script>

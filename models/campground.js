@@ -12,6 +12,7 @@ ImageSchema.virtual('thumbnail').get(function () {
     return this.url.replace('/upload', '/upload/w_250');
 });
 
+const opts = { toJSON: { virtuals: true } }; //to include virtuals in JSON as mongoose by default doesn't do that
 const campgroundSchema = new Schema({
     title: String,
     image: String,
@@ -44,6 +45,10 @@ const campgroundSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Review'
     }]
+}, opts);
+
+campgroundSchema.virtual('properties.popUpMarkup').get(function () {
+    return `<h6><b>${this.title}</b></h6>${this.location}`;
 })
 
 campgroundSchema.post('findOneAndDelete', async function(doc) { //If any campground is deleted it will be passed to this post middleware

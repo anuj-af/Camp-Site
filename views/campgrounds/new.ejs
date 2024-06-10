@@ -32,19 +32,15 @@
                         Looks good!
                     </div>
                 </div>
-                <div class="previewImgContainer mb-4">
-                    <input type="file" id="file-input" name="images" onchange="preview()" multiple>
-                    <label for="file-input" class="previewLabel">
-                        <i class="fas fa-upload"></i> &nbsp; Upload Images
-                    </label>
-                    <p id="num-of-files">No Files Chosen</p>
-                    <div id="previewImages"></div>
-                </div>     
                 <div class="mb-3">
-                    <button class="btn btn-success">Add Campground</button>
+                    <label class="form-label" for="images">Upload Image</label>
+                    <input type="file" class="form-control" name="images" id="images" multiple>
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-primary">Add Campground</button>
                 </div>
             </form>
-            <footer>
+            <footer class="mb-4">
                 <a href="/campgrounds">Back</a>
             </footer>
         </div>

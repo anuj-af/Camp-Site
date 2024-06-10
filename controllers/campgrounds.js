@@ -2,6 +2,8 @@ const Campground = require('../models/campground');
 const opencage = require('opencage-api-client');
 const ExpressError = require('../utils/ExpressError');
 const {cloudinary} = require('../cloudinary');
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
+const geocoder = mbxGeocoding({accessToken: process.env.MAPBOX_TOKEN});
 
 module.exports.index = async (req, res) => {
     const campgrounds = await Campground.find({}).populate('images');
@@ -27,17 +29,18 @@ module.exports.createCampground = async (req, res) => {
     //     const msg = error.details.map(elm => elm.message).join(',');
     //     throw new ExpressError(msg,400)
     // }
-    const geoData = await opencage.geocode({
-        q: req.body.location,
+    // const geoData = await opencage.geocode({
+    //     q: req.body.location,
+    //     limit: 1
+    // })
+    const geoData = await geocoder.forwardGeocode({
+        query: req.body.location,
         limit: 1
-    })
+      }).send();
     const campground = new Campground(req.body);
-    console.log(req.files);
     campground.images = req.files.map(f => ({ url: f.path, filename: f.filename })); //Implicit return
     campground.author = req.user._id;
-    campground.geometry.type = 'Point';
-    campground.geometry.coordinates.push(geoData.results[0].geometry.lat);
-    campground.geometry.coordinates.push(geoData.results[0].geometry.lng);
+    campground.geometry = geoData.body.features[0].geometry;
     await campground.save();
     console.log(campground);
     req.flash('success', 'Successfully made a new Campground');
